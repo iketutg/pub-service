@@ -1,0 +1,93 @@
+server:
+  port: ${SERVER_PORT:8124}
+
+spring:
+  application:
+    name: publisher-services
+  main:
+    allow-bean-definition-overriding: true
+
+  datasource:
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: ${POSTGRES_USER:postgres}
+    ##url: ${MYSQL_URL:'jdbc:mysql://192.168.1.11:3306/ematerai?serverTimezone=Asia/Jakarta'}
+    password: ${POSTGRES_PASSWORD:mysecretpassword}
+    url: ${POSTGRES_URL:jdbc:postgresql://localhost:5432/mytestdb}
+    hiraki:
+      connectionTimeout: 2000
+      maximumPoolSize: 5
+## default connection pool
+#  spring.datasource.hikari.connectionTimeout=20000
+#  spring.datasource.hikari.maximumPoolSize=5
+#
+#  ## PostgreSQL
+#  spring.datasource.url=jdbc:postgresql://localhost:5432/postgres
+#  spring.datasource.username=postgres
+#  spring.datasource.password=password
+
+  sleuth:
+    redis:
+      enabled: 'true'
+
+  zipkin:
+    enabled: 'false'
+
+  jpa:
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: 'true'
+
+
+  redis:
+    password: ${REDIS_PASSWORD:}
+    host: ${REDIS_HOST:127.0.0.1}
+    port: ${REDIS_PORT:6379}
+    cluster-on: ${REDIS_CLUSTERON:false}
+    cluster:
+      nodes: ${REDIS_CLUSTER_NODES:127.0.0.1:6370,127.0.0.1:6371,127.0.0.1:6372,127.0.0.1:5370,127.0.0.1:5371,127.0.0.1:5372}
+      max-redirects: ${REDIS_CLUSTER_MAXREDIRECTS:3}
+
+    #    isUsePooling : 'true'
+    jedis:
+      pool:
+        max-active: ${REDIS_POOL_MAXACTIVE:30}
+        max-wait: ${REDIS_POOL_MAXWAIT:-1}
+        # Maximum free connections in connection pool default 8
+        max-idle: ${REDIS_POOL_MAXIDLE:8}
+        # Minimum free connections in connection pool default 0
+        min-idle: ${REDIS_POOL_MINIDLE:0}
+
+    cache:
+      redis:
+        time-to-live: ${REDIS_TTL:1000}
+
+otp:
+  baseurl: ${OTP_BASEURL:http://localhost:3000}
+
+feign:
+  client:
+    config:
+      default:
+        loggerLevel: ${FEIGN_LOGGERLEVEL:full}
+        connectTimeout: 1500
+        readTimeout: 1500
+
+info:
+  app.name:  ${spring.application.name}
+  app.version: ${PUBSERVICES_APP_VERSION:0.0.0}
+
+file:
+  location: $(filetemp:file:/var/tempfile)
+
+logging:
+  file:
+    path: ${PUBSERVICES_LOGGING_PATH:/Users/iketutg/logs/}
+  level:
+    root: ${PUBSERVICES_LOGGING_ROOT:INFO}
+#    org:
+#      springframework:
+
+
